@@ -1,4 +1,4 @@
-import pigpio
+from PIGPIO import pigpio
 
 class Servo(object):
 
@@ -9,7 +9,7 @@ class Servo(object):
     self.pin = pin
     self.pi = pigpio.pi()
     self.pi.set_mode(self.pin, pigpio.OUTPUT)
-    #self.pi.set_servo_pulsewidth(self.pin, self.center)
+    self.current_angle = 0
 
   def calc_duty_cycle(self, angle):
     return (95.0/9.0) * angle + 550
@@ -28,8 +28,18 @@ class Servo(object):
 
   def move(self, angle):
     pw = self.calc_duty_cycle(angle)
-    print(pw)
     self.pi.set_servo_pulsewidth(self.pin, pw)
+    self.current_angle = angle
+
+  def adjust(self, amount):
+     ''' adjust move relative to currnet angle
+	 up to maximum'''
+
+     angle = self.current_angle + amount
+     if angle < self.full_left: angle = self.full_left
+     if angle > self.full_right: angle = self.full_right
+
+     self.move(angle)
 
   def shutdown(self):
     self.pi.set_servo_pulsewidth(self.pin, 0)

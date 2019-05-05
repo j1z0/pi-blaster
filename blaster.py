@@ -16,17 +16,17 @@ class Trigger(Motor):
 def sentry_mode(servo, trigger,fire=False):
     try:
       while True:
-        for i in range(60, 120):
+        for i in range(20, 160):
           servo.move(i)
-          time.sleep(0.05)
+          time.sleep(.05)
           if (not(i % 10)) and fire:
             trigger.fire(1)
             time.sleep(1)
             print "shot fired"
 
-        for j in range(120,60,-1):
+        for j in range(160,20,-1):
           servo.move(j)
-          time.sleep(0.05)
+          time.sleep(.05)
           if (not(j % 10)) and fire:
             trigger.fire(1)
             time.sleep(1)
